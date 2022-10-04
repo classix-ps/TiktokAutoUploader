@@ -79,9 +79,11 @@ class Upload:
 
 
     # This gets the hashtags from file and adds them to the website input
-    def addCaptions(self, hashtag_file=None):
+    def addCaptions(self, filename=None, hashtag_file=None):
         if not hashtag_file:
             caption_elem = self.webbot.getCaptionElem()
+            if filename:
+                caption_elem.send_keys(f"{filename[:-4]}, Credit: ESA/Hubble")
             for hashtag in self.IO.getHashTagsFromFile():
                 caption_elem.send_keys(hashtag)
 
@@ -142,6 +144,8 @@ class Upload:
         self.cookies = Cookies(self.bot)
         self.bot.refresh()
 
+        file_input_element = self.webbot.getVideoUploadInput()
+        """
         try:
             file_input_element = self.webbot.getVideoUploadInput()
         except Exception as e:
@@ -149,7 +153,11 @@ class Upload:
             print("Major error, cannot find the file upload button, please update getVideoUploadInput() in Bot.py")
             file_input_element = None
             exit()
+        """
         abs_path = os.path.join(os.getcwd(), filename)
+        print(abs_path)
+        file_input_element.send_keys(abs_path)
+        """
         try:
             file_input_element.send_keys(abs_path)
         except StaleElementReferenceException as e:
@@ -160,22 +168,20 @@ class Upload:
             except Exception as e:
                 print("Major error, cannot find the file upload button, please update getVideoUploadInput() in Bot.py")
                 exit()
-
+        """
 
         # We need to wait until it is uploaded and then clear input.
 
-        self.addCaptions()
+        self.addCaptions(filename)
         utils.randomTimeQuery()
+        """
         if private:
             self.webbot.selectPrivateRadio()  # private video selection
             utils.randomTimeQuery()
         else:
-            """
             self.webbot.selectPublicRadio()  # public video selection
             utils.randomTimeQuery()
-            """
             pass
-        if not test:
-
-            self.webbot.uploadButtonClick()  # upload button
-        input("Press any button to exit")
+        """
+        #if not test:
+        #self.webbot.uploadButtonClick()  # upload button

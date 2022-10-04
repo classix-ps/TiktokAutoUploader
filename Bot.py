@@ -15,7 +15,8 @@ class Bot:
         WebDriverWait(self.bot, 10).until(EC.presence_of_element_located((By.TAG_NAME, "iframe")))
         self.bot.switch_to.frame(0)
         self.bot.implicitly_wait(1)
-        file_input_element = self.bot.find_elements(By.CLASS_NAME, "upload-btn-input")[0]
+        #file_input_element = self.bot.find_elements(By.CLASS_NAME, "upload-btn-input")[0]
+        file_input_element = self.bot.find_element(By.XPATH, "//input[@type='file']")
         # document.getElementsByClassName("op-part")[0].childNodes[1]  # New locator
         return file_input_element
 
@@ -70,9 +71,11 @@ class Bot:
             " please submit yourself and edit submit button placement.!!")
 
     def uploadButtonClick(self):
+        upload_elem = self.bot.find_element(By.CLASS_NAME, "btn-post").click()
         # Button Works
+        """
         try:
-            """Newer layout."""
+            #Newer layout.
             WebDriverWait(self.bot, 10).until(EC.presence_of_all_elements_located((By.CLASS_NAME, "op-part-v2")))
             operation_elems = self.bot.find_elements(By.CLASS_NAME, "op-part-v2")[0]
             upload_elem = operation_elems.find_elements(By.XPATH, './*')[1]
@@ -83,13 +86,14 @@ class Bot:
                 self.bot.find_element(By.XPATH, f'//button[text()="{upload_name}"]')
             except Exception as e:
                 try:
-                    """Older Layout"""
+                    #Older Layout
                     self.click_elem(
                         'document.getElementsByClassName("btn-post")[0].click()',
                         "Javascript had trouble finding the post button with given selector,"
                         " please submit yourself and edit submit button placement.!!")
                 except Exception as e:
                     print("Could not upload, please upload manually.")
+        """
 
 
 

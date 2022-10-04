@@ -18,7 +18,8 @@ class Cookies:
             for index, filename in enumerate(os.listdir(self.cookies_dir)):
                 print(f"({index}) --> {filename}")
             print("(a) --> Add NEW Cookie.")
-            selected = None
+            #selected = None
+            selected = 0
             while type(selected) is not int or not 0 <= selected < len(os.listdir(self.cookies_dir)):
                 try:
                     selection = input("Please select an integer representing a cookie::")
