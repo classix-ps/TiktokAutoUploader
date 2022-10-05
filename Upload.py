@@ -205,6 +205,9 @@ class Upload:
         """
         #if not test:
         print("Uploading...")
-        time.sleep(randint(8, 11))
+        time.sleep(12)
+        #self.bot.implicitly_wait(7)
         self.webbot.uploadButtonClick()  # upload button
-        time.sleep(randint(10, 15))
+        print("Uploaded.")
+        time.sleep(17)
+        #self.bot.implicitly_wait(15)
