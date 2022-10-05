@@ -89,7 +89,7 @@ class Upload:
 
             if filename:
                 head, tail = os.path.split(filename)
-                name = tail[:-4]
+                name = tail[:-4].replace('_', ' ')
                 print(name)
                 if len(name) > 48:
                     name = name[:47]
@@ -174,8 +174,7 @@ class Upload:
         """
         self.addCaptions(filename)
 
-        #abs_path_whitespace = abs_path.replace(' ', '^ ')
-        #file_input_element.send_keys(abs_path_whitespace)
+
         abs_path = os.path.realpath(filename)
         file_input_element.send_keys(abs_path)
         """
@@ -205,7 +204,7 @@ class Upload:
         """
         #if not test:
         print("Uploading...")
-        time.sleep(12)
+        time.sleep(10)
         #self.bot.implicitly_wait(7)
         self.webbot.uploadButtonClick()  # upload button
         print("Uploaded.")

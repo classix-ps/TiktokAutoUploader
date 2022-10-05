@@ -74,7 +74,7 @@ class Bot:
 
     def uploadButtonClick(self):
         upload_elem = self.bot.find_element(By.CLASS_NAME, "btn-post")
-        print(upload_elem.is_enabled())
+        #print(upload_elem.is_enabled())
         upload_elem.click()
         # Button Works
         """
