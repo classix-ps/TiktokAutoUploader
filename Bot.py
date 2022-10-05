@@ -2,6 +2,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import selenium.common
+import utils
 class Bot:
     """Bot used as high level interaction with web-browser via Javascript exec"""
     def __init__(self, bot):
@@ -12,10 +13,11 @@ class Bot:
 
     def getVideoUploadInput(self):
         # Button is nested in iframe document. Select iframe first then select upload button
-        WebDriverWait(self.bot, 10).until(EC.presence_of_element_located((By.TAG_NAME, "iframe")))
+        WebDriverWait(self.bot, 50).until(EC.presence_of_element_located((By.TAG_NAME, "iframe")))
         self.bot.switch_to.frame(0)
         self.bot.implicitly_wait(1)
         #file_input_element = self.bot.find_elements(By.CLASS_NAME, "upload-btn-input")[0]
+        WebDriverWait(self.bot, 50).until(EC.presence_of_element_located((By.XPATH, "//input[@type='file']")))
         file_input_element = self.bot.find_element(By.XPATH, "//input[@type='file']")
         # document.getElementsByClassName("op-part")[0].childNodes[1]  # New locator
         return file_input_element
@@ -71,7 +73,9 @@ class Bot:
             " please submit yourself and edit submit button placement.!!")
 
     def uploadButtonClick(self):
-        upload_elem = self.bot.find_element(By.CLASS_NAME, "btn-post").click()
+        upload_elem = self.bot.find_element(By.CLASS_NAME, "btn-post")
+        print(upload_elem.is_enabled())
+        upload_elem.click()
         # Button Works
         """
         try:

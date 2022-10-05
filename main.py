@@ -1,4 +1,6 @@
 from TiktokBot import TiktokBot
+import os
+
 if __name__ == "__main__":
     # Example Usage
     # pip install git+https://github.com/pytube/pytube
@@ -15,7 +17,17 @@ if __name__ == "__main__":
 
 
     # You can also choose to upload a file directly with no editing or cropping of the video.
-    tiktok_bot.upload.directUpload("test.mp4", private=True, test=True)
+    #tiktok_bot.upload.directUpload("test.mp4", private=True, test=True)
+    fileIndex = -1
+    with open("fileIndex") as f:
+        fileIndex = int(f.readlines()[0][0])
+    #tiktok_bot.upload.directUpload(sorted(os.listdir("../videos"))[fileIndex])
+    #tiktok_bot.upload.directUpload("test.mp4")
+    tiktok_bot.upload.directUpload("../videos/AM1316-241.mp4")
+    #tiktok_bot.upload.directUpload("../videos/2MASXJ09133888-1019196.mp4")
+    with open("fileIndex", "w") as f:
+        #f.write(str(fileIndex+1))
+        f.write("0")
 
 
     ####################################################################################################################

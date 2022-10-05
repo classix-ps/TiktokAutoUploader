@@ -8,6 +8,9 @@ from IO import IO
 from Video import Video
 from selenium.common.exceptions import StaleElementReferenceException
 
+from random import randint, shuffle
+from selenium.webdriver.common.by import By
+
 PROTECTED_FILES = ["processed.mp4", "VideosSaveHere.txt"]
 
 class Upload:
@@ -82,10 +85,25 @@ class Upload:
     def addCaptions(self, filename=None, hashtag_file=None):
         if not hashtag_file:
             caption_elem = self.webbot.getCaptionElem()
+            caption = ""
+
             if filename:
-                caption_elem.send_keys(f"{filename[:-4]}, Credit: ESA/Hubble")
-            for hashtag in self.IO.getHashTagsFromFile():
-                caption_elem.send_keys(hashtag)
+                head, tail = os.path.split(filename)
+                name = tail[:-4]
+                print(name)
+                if len(name) > 48:
+                    name = name[:47]
+                caption += f"{name}. Image credit: ESA/Hubble, contains a sample of First Step by Hans Zimmer courtesy of WaterTowerMusic "
+            hashtags = self.IO.getHashTagsFromFile()
+            hashtags.remove(' ')
+            shuffle(hashtags)
+            for hashtag in hashtags:
+                toAppend = hashtag + ' '
+                if len(caption) + len(toAppend) > 150:
+                    break
+                caption += toAppend
+
+            caption_elem.send_keys(caption)
 
     def clearCaptions(self):
         caption_elem = self.webbot.getCaptionElem()
@@ -154,8 +172,11 @@ class Upload:
             file_input_element = None
             exit()
         """
-        abs_path = os.path.join(os.getcwd(), filename)
-        print(abs_path)
+        self.addCaptions(filename)
+
+        #abs_path_whitespace = abs_path.replace(' ', '^ ')
+        #file_input_element.send_keys(abs_path_whitespace)
+        abs_path = os.path.realpath(filename)
         file_input_element.send_keys(abs_path)
         """
         try:
@@ -172,8 +193,7 @@ class Upload:
 
         # We need to wait until it is uploaded and then clear input.
 
-        self.addCaptions(filename)
-        utils.randomTimeQuery()
+        #self.addCaptions(filename)
         """
         if private:
             self.webbot.selectPrivateRadio()  # private video selection
@@ -184,4 +204,7 @@ class Upload:
             pass
         """
         #if not test:
-        #self.webbot.uploadButtonClick()  # upload button
+        print("Uploading...")
+        time.sleep(randint(8, 11))
+        self.webbot.uploadButtonClick()  # upload button
+        time.sleep(randint(10, 15))
