@@ -4,7 +4,8 @@ import os
 if __name__ == "__main__":
     # Example Usage
     # pip install git+https://github.com/pytube/pytube
-    
+    os.chdir("/home/ubuntu/TiktokAutoUploader")
+
     tiktok_bot = TiktokBot()  # "VideosDirPath", is the default directory where images edited will be saved.
         
     # Use a video from your directory.

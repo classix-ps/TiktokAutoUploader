@@ -17,8 +17,7 @@ class Bot:
         self.bot.switch_to.frame(0)
         self.bot.implicitly_wait(1)
         #file_input_element = self.bot.find_elements(By.CLASS_NAME, "upload-btn-input")[0]
-        WebDriverWait(self.bot, 50).until(EC.presence_of_element_located((By.XPATH, "//input[@type='file']")))
-        file_input_element = self.bot.find_element(By.XPATH, "//input[@type='file']")
+        file_input_element = WebDriverWait(self.bot, 50).until(EC.presence_of_element_located((By.XPATH, "//input[@type='file']")))
         # document.getElementsByClassName("op-part")[0].childNodes[1]  # New locator
         return file_input_element
 
@@ -75,6 +74,7 @@ class Bot:
     def uploadButtonClick(self):
         upload_elem = self.bot.find_element(By.CLASS_NAME, "btn-post")
         #print(upload_elem.is_enabled())
+        WebDriverWait(self.bot, 50).until(EC.invisibility_of_element_located((By.XPATH, "//button[@disabled]")))
         upload_elem.click()
         # Button Works
         """
