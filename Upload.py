@@ -12,8 +12,10 @@ class Upload:
     def __init__(self, user):
         self.bot = None
         self.lang = "en"
-        self.url = f"https://www.tiktok.com/upload?lang={self.lang}"
+        self.account_url = f"https://www.tiktok.com/@discovergalaxies?lang={self.lang}"
+        self.upload_url = f"https://www.tiktok.com/upload?lang={self.lang}"
         self.cookies = None
+        self.newestVideoHref = None
 
 
     # This gets the hashtags from file and adds them to the website input
@@ -48,10 +50,18 @@ class Upload:
         if self.bot is None:
             self.bot = Browser().getBot()
             self.webbot = Bot(self.bot)
-        self.bot.get(self.url)
-        #utils.randomTimeQuery()
-        self.cookies = Cookies(self.bot)
-        self.bot.refresh()
+
+        if self.newestVideoHref is None:
+            self.bot.get(self.account_url)
+            self.cookies = Cookies(self.bot)
+            self.bot.refresh()
+            self.newestVideoHref = self.webbot.getNewestVideoHref()
+            print(self.newestVideoHref)
+
+        #self.cookies = Cookies(self.bot)
+        #self.bot.refresh()
+
+        self.bot.get(self.upload_url)
 
         file_input_element = self.webbot.getVideoUploadInput()
         """
@@ -68,34 +78,15 @@ class Upload:
 
         abs_path = os.path.realpath(filename)
         file_input_element.send_keys(abs_path)
-        """
-        try:
-            file_input_element.send_keys(abs_path)
-        except StaleElementReferenceException as e:
-            try:
-                self.bot.implicitly_wait(5)
-                file_input_element = self.webbot.getVideoUploadInput()
-                file_input_element.send_keys(abs_path)
-            except Exception as e:
-                print("Major error, cannot find the file upload button, please update getVideoUploadInput() in Bot.py")
-                exit()
-        """
 
-        # We need to wait until it is uploaded and then clear input.
-
-        #self.addCaptions(filename)
-        """
-        if private:
-            self.webbot.selectPrivateRadio()  # private video selection
-            utils.randomTimeQuery()
-        else:
-            self.webbot.selectPublicRadio()  # public video selection
-            utils.randomTimeQuery()
-            pass
-        """
-        #if not test:
         print("Uploading...")
         self.webbot.uploadButtonClick()  # upload button
         print("Uploaded.")
-        #time.sleep(60)
-        #self.bot.implicitly_wait(15)
+        #self.webbot.waitUntilUploaded()
+        print("Finished Uploading.")
+
+        self.bot.get(self.account_url)
+
+        newHref = self.webbot.getNewestVideoHref()
+        print(newHref)
+        return self.newestVideoHref != newHref
