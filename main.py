@@ -24,9 +24,10 @@ if __name__ == "__main__":
         fileIndex = int(f.readlines()[0])
 
     executions = 1
+    maxExecutions = 10
     while not tiktok_bot.upload.directUpload("../videos/" + sorted(os.listdir("../videos"))[fileIndex]):
         executions += 1
-        if executions > 10:
+        if executions > maxExecutions:
             break
         pass
     #tiktok_bot.upload.directUpload("test.mp4")
@@ -34,9 +35,9 @@ if __name__ == "__main__":
     #tiktok_bot.upload.directUpload("../videos/2MASXJ09133888-1019196.mp4")
     #tiktok_bot.upload.directUpload("../videos/25 years of stunning definition.mp4")
 
-    with open("fileIndex", "w") as f:
-        f.write(str(fileIndex+1))
-        #f.write("0")
+    if executions <= maxExecutions:
+        with open("fileIndex", "w") as f:
+            f.write(str(fileIndex+1))
 
     with open("executionLog", "a") as f:
         f.write(f"{fileIndex}: {executions}\n")

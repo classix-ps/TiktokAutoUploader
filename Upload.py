@@ -64,17 +64,8 @@ class Upload:
         self.bot.get(self.upload_url)
 
         file_input_element = self.webbot.getVideoUploadInput()
-        """
-        try:
-            file_input_element = self.webbot.getVideoUploadInput()
-        except Exception as e:
-            print(f"Error: {e}")
-            print("Major error, cannot find the file upload button, please update getVideoUploadInput() in Bot.py")
-            file_input_element = None
-            exit()
-        """
-        self.addCaptions(filename)
 
+        self.addCaptions(filename)
 
         abs_path = os.path.realpath(filename)
         file_input_element.send_keys(abs_path)
