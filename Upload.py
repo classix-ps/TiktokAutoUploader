@@ -57,9 +57,12 @@ class Upload:
             self.bot.refresh()
             self.newestVideoHref = self.webbot.getNewestVideoHref()
             print(self.newestVideoHref)
-
-        #self.cookies = Cookies(self.bot)
-        #self.bot.refresh()
+        else: # Additional check to avoid double uploads
+            self.bot.refresh()
+            newHref = self.webbot.getNewestVideoHref()
+            if newHref != self.newestVideoHref:
+                print("Double upload caught and avoided.")
+                return true
 
         self.bot.get(self.upload_url)
 

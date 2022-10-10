@@ -39,8 +39,7 @@ if __name__ == "__main__":
         with open("fileIndex", "w") as f:
             f.write(str(fileIndex+1))
 
-    with open("executionLog", "a") as f:
-        f.write(f"{fileIndex}: {executions}\n")
+    print(f"Executions: {executions}")
 
 
     ####################################################################################################################
