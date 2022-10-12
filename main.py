@@ -1,5 +1,6 @@
 from TiktokBot import TiktokBot
 import os
+import sys
 
 if __name__ == "__main__":
     # Example Usage
@@ -25,11 +26,12 @@ if __name__ == "__main__":
 
     executions = 1
     maxExecutions = 10
-    while not tiktok_bot.upload.directUpload("../videos/" + sorted(os.listdir("../videos"))[fileIndex], "hashtags.txt"):
-        executions += 1
-        if executions > maxExecutions:
-            break
-        pass
+    if str(sys.argv[1]) == "galaxy":
+        while not tiktok_bot.upload.directUpload("../videos/" + sorted(os.listdir("../videos"))[fileIndex], "galaxyHashtags.txt"):
+            executions += 1
+            if executions > maxExecutions:
+                break
+            pass
     #tiktok_bot.upload.directUpload("test.mp4")
     #tiktok_bot.upload.directUpload("../videos/AM1316-241.mp4")
     #tiktok_bot.upload.directUpload("../videos/2MASXJ09133888-1019196.mp4")
