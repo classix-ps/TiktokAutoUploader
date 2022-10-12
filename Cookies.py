@@ -12,15 +12,16 @@ class Cookies:
 
 
     def selectCookie(self):
-        if len(os.listdir(self.cookies_dir)) > 0:
+        cookies = os.listdir(self.cookies_dir)
+        if len(cookies) > 0:
             print("Select Cookie number that you want to use:: ")
-            cookies_dict = dict(enumerate(os.listdir(self.cookies_dir)))
-            for index, filename in enumerate(os.listdir(self.cookies_dir)):
+            cookies_dict = dict(enumerate(cookies))
+            for index, filename in enumerate(cookies):
                 print(f"({index}) --> {filename}")
             print("(a) --> Add NEW Cookie.")
             #selected = None
             selected = 0
-            while type(selected) is not int or not 0 <= selected < len(os.listdir(self.cookies_dir)):
+            while type(selected) is not int or not 0 <= selected < len(cookies):
                 try:
                     selection = input("Please select an integer representing a cookie::")
                     selected = int(selection)

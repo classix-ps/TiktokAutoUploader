@@ -20,19 +20,20 @@ class Upload:
 
     # This gets the hashtags from file and adds them to the website input
     def addCaptions(self, filename=None, hashtag_file=None):
-        if not hashtag_file:
-            caption_elem = self.webbot.getCaptionElem()
-            caption = ""
+        caption_elem = self.webbot.getCaptionElem()
+        caption = ""
 
-            if filename:
-                head, tail = os.path.split(filename)
-                name = tail[:-4].replace('_', ' ')
-                print(name)
-                if len(name) > 48:
-                    name = name[:47]
-                caption += f"{name}. Image credit: ESA/Hubble, contains a sample of First Step by Hans Zimmer courtesy of WaterTowerMusic "
+        if filename:
+            head, tail = os.path.split(filename)
+            name = tail[:-4].replace('_', ' ')
+            print(name)
+            if len(name) > 48:
+                name = name[:47]
+            caption += f"{name}. Image credit: ESA/Hubble, contains a sample of First Step by Hans Zimmer courtesy of WaterTowerMusic "
+        
+        if hashtag_file:
             hashtags = []
-            with open("hashtags.txt", "r") as f:
+            with open(hashtag_file, "r") as f:
                 for line in f.readlines():
                     hashtags.append(line.replace("\n", ""))
 
@@ -43,10 +44,10 @@ class Upload:
                     break
                 caption += toAppend
 
-            caption_elem.send_keys(caption)
+        caption_elem.send_keys(caption)
 
 
-    def directUpload(self, filename, private=False, test=False):
+    def directUpload(self, filename, hashtag_file):
         if self.bot is None:
             self.bot = Browser().getBot()
             self.webbot = Bot(self.bot)
@@ -62,13 +63,13 @@ class Upload:
             newHref = self.webbot.getNewestVideoHref()
             if newHref != self.newestVideoHref:
                 print("Double upload caught and avoided.")
-                return true
+                return True
 
         self.bot.get(self.upload_url)
 
         file_input_element = self.webbot.getVideoUploadInput()
 
-        self.addCaptions(filename)
+        self.addCaptions(filename, hashtag_file)
 
         abs_path = os.path.realpath(filename)
         file_input_element.send_keys(abs_path)

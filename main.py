@@ -25,7 +25,7 @@ if __name__ == "__main__":
 
     executions = 1
     maxExecutions = 10
-    while not tiktok_bot.upload.directUpload("../videos/" + sorted(os.listdir("../videos"))[fileIndex]):
+    while not tiktok_bot.upload.directUpload("../videos/" + sorted(os.listdir("../videos"))[fileIndex], "hashtags.txt"):
         executions += 1
         if executions > maxExecutions:
             break
