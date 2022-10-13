@@ -6,8 +6,6 @@ if __name__ == "__main__":
     # Example Usage
     # pip install git+https://github.com/pytube/pytube
     os.chdir("/home/ubuntu/TiktokAutoUploader")
-
-    tiktok_bot = TiktokBot()  # "VideosDirPath", is the default directory where images edited will be saved.
         
     # Use a video from your directory.
     # tiktok_bot.upload.uploadVideo("test1.mp4", "This is test", 1, 2, private=True)
@@ -20,14 +18,29 @@ if __name__ == "__main__":
 
     # You can also choose to upload a file directly with no editing or cropping of the video.
     #tiktok_bot.upload.directUpload("test.mp4", private=True, test=True)
-    fileIndex = -1
-    with open("fileIndex") as f:
-        fileIndex = int(f.readlines()[0])
 
     executions = 1
     maxExecutions = 10
     if str(sys.argv[1]) == "galaxy":
+        tiktok_bot = TiktokBot("discovergalaxies", "galaxy.cookie", "VideosDirPath")
+
+        fileIndex = -1
+        with open("fileIndex") as f:
+            fileIndex = int(f.readlines()[0])
+
         while not tiktok_bot.upload.directUpload("../videos/" + sorted(os.listdir("../videos"))[fileIndex], "galaxyHashtags.txt"):
+            executions += 1
+            if executions > maxExecutions:
+                break
+            pass
+        
+        if executions <= maxExecutions:
+            with open("fileIndex", "w") as f:
+                f.write(str(fileIndex+1))
+    elif str(sys.argv[1]) == "podcast":
+        tiktok_bot = TiktokBot("viralpodcastclips", "podcast.cookie", "VideosDirPath")
+
+        while not tiktok_bot.upload.uploadVideo("https://www.youtube.com/watch?v=cqDb9AhblyQ", "", 0, 10, "podcastHashtags.txt"):
             executions += 1
             if executions > maxExecutions:
                 break
@@ -36,10 +49,6 @@ if __name__ == "__main__":
     #tiktok_bot.upload.directUpload("../videos/AM1316-241.mp4")
     #tiktok_bot.upload.directUpload("../videos/2MASXJ09133888-1019196.mp4")
     #tiktok_bot.upload.directUpload("../videos/25 years of stunning definition.mp4")
-
-    if executions <= maxExecutions:
-        with open("fileIndex", "w") as f:
-            f.write(str(fileIndex+1))
 
     print(f"Executions: {executions}")
 

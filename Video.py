@@ -8,8 +8,9 @@ from tqdm import tqdm
 
 
 class Video:
-    def __init__(self, dir, caption, user):
+    def __init__(self, dir, caption, videoSaveDir):
         self.dir = dir
+        print(dir)
         try:
             self.clip = VideoFileClip(self.dir)
         except Exception as e:
@@ -22,8 +23,7 @@ class Video:
         self.tiktok_dim = (1080, 1920)
         self.bg = "black"
         self.color = "white"
-        self.userPreference = user
-
+        self.videoSaveDir = videoSaveDir
 
     def customCrop(self, start_time, end_time):
         templist = sorted([start_time, end_time])
@@ -31,7 +31,7 @@ class Video:
         if end_time > self.clip.duration:
             end_time = self.clip.duration
         self.clip = VideoFileClip(self.dir)
-        self.dir = os.path.join(self.userPreference.video_save_dir, "processed") + ".mp4"
+        self.dir = os.path.join(self.videoSaveDir, "processed") + ".mp4"
         self.clip = self.clip.subclip(t_start=start_time, t_end=end_time)
         self.clip.write_videofile(self.dir)
 
@@ -55,12 +55,12 @@ class Video:
             memeOverlay = memeOverlay.set_duration(self.clip.duration)
             self.clip = CompositeVideoClip([base_clip, self.clip.set_position(("center", "center")), memeOverlay.set_position(("center", bottom_meme_pos))])
         # Continue normal flow.
-        self.dir = os.path.join(self.userPreference.video_save_dir, "post-processed") + ".mp4"
+        self.dir = os.path.join(self.videoSaveDir, "post-processed") + ".mp4"
         self.clip.write_videofile(self.dir, fps=24)
 
 
     @staticmethod
-    def get_youtube_video(user, url, max_res=1080):
+    def get_youtube_video(videoSaveDir, url, max_res=1080):
 
         streams = YouTube(url).streams.filter(progressive=True)
         valid_streams = sorted(streams, reverse=True, key=lambda x: x.resolution is not None)
@@ -68,7 +68,7 @@ class Video:
         if filtered_streams:
             selected_stream = filtered_streams[0]
             print("Starting Download for Video...")
-            selected_stream.download(output_path="VideosDirPath", filename="pre-processed")
+            selected_stream.download(output_path="VideosDirPath", filename="pre-processed.mp4")
             filename = os.path.join("VideosDirPath", "pre-processed"+".mp4")
             return filename
 
@@ -77,7 +77,7 @@ class Video:
         audio = YouTube(url).streams.filter(file_extension="webm", only_audio=True, adaptive=True).first()
         if video and audio:
             random_filename = str(int(time.time()))  # extension is added automatically.
-            video_path = os.path.join(user.video_save_dir, "pre-processed.mp4")
+            video_path = os.path.join(videoSaveDir, "pre-processed.mp4")
             resolution = int(video.resolution[:-1])
             # print(resolution)
             if resolution >= 360:

@@ -3,42 +3,16 @@ from os.path import exists
 
 
 class Cookies:
-    def __init__(self, bot):
+    def __init__(self, bot, cookie):
         self.bot = bot
         self.cookies_dir = os.path.join(os.getcwd(), "CookiesDir")
         if not exists(self.cookies_dir):
             os.mkdir(self.cookies_dir)
-        self.selectCookie()
-
-
-    def selectCookie(self):
-        cookies = os.listdir(self.cookies_dir)
-        if len(cookies) > 0:
-            print("Select Cookie number that you want to use:: ")
-            cookies_dict = dict(enumerate(cookies))
-            for index, filename in enumerate(cookies):
-                print(f"({index}) --> {filename}")
-            print("(a) --> Add NEW Cookie.")
-            #selected = None
-            selected = 0
-            while type(selected) is not int or not 0 <= selected < len(cookies):
-                try:
-                    selection = input("Please select an integer representing a cookie::")
-                    selected = int(selection)
-                except ValueError:
-                    if selection == "a":
-                        self.createCookie()
-                        return
-                    pass
-
-            selected_cookie = cookies_dict[selected]
-            self.loadCookies(selected_cookie)
-        else:
-            print("No cookies stored on save directory!")
-            self.createCookie()
+        self.loadCookies(cookie)
 
 
     def loadCookies(self, selected_cookie):
+        print(f"Loading {selected_cookie}")
         # Using chrome, sameSite cookie must not be set to None due to Google's policy.
         cookie_path = os.path.join(self.cookies_dir, selected_cookie)
         cookie_data = pickle.load(open(cookie_path, "rb"))
